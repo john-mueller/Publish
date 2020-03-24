@@ -19,6 +19,8 @@ public struct Path: StringWrapper {
 public extension Path {
     /// The default path used when generating RSS feeds.
     static var defaultForRSSFeed: Path { "feed.rss" }
+    /// The default path used when generating Atom feeds.
+    static var defaultForAtomFeed: Path { "feed.atom" }
     /// The default path used when generating HTML for tags and tag lists.
     static var defaultForTagHTML: Path { "tags" }
     /// The default path used for website favicons.

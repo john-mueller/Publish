@@ -352,6 +352,31 @@ public extension PublishingStep {
         }
     }
 
+    /// Generate an Atom feed for the website.
+    /// - parameter includedSectionIDs: The IDs of the sections which items
+    ///   to include when generating the feed.
+    /// - parameter config: The configuration to use when generating the feed.
+    /// - parameter date: The date that should act as the build and publishing
+    ///   date for the generated feed (default: the current date).
+    static func generateAtomFeed(
+        including includedSectionIDs: Set<Site.SectionID>,
+        config: AtomFeedConfiguration = .default,
+        date: Date = Date()
+    ) -> Self {
+        guard !includedSectionIDs.isEmpty else { return .empty }
+        
+        return step(named: "Generate Atom feed") { context in
+            let generator = AtomFeedGenerator(
+                includedSectionIDs: includedSectionIDs,
+                config: config,
+                context: context,
+                date: date
+            )
+
+            try generator.generate()
+        }
+    }
+
     /// Generate a site map for the website, which is an XML file used
     /// for search engine indexing.
     /// - parameter excludedPaths: Any paths to exclude from the site map.
