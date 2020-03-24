@@ -6,24 +6,25 @@ import Plot
 /// use `AtomFeedConfiguration.default`.
 public struct AtomFeedConfiguration: FeedConfiguration {
     public var targetPath: Path
-    public var ttlInterval: TimeInterval
+    public let ttlInterval: TimeInterval = 0
+    public var author: String
     public var maximumItemCount: Int
     public var indentation: Indentation.Kind?
 
     /// Initialize a new configuration instance.
     /// - Parameter targetPath: The path that the feed should be generated at.
-    /// - Parameter ttlInterval: The feed's TTL time interval.
+    /// - Parameter author: The feed's author.
     /// - Parameter maximumItemCount: The maximum number of items that the
     ///   feed should contain.
     /// - Parameter indentation: How the feed should be indented.
     public init(
         targetPath: Path = .defaultForAtomFeed,
-        ttlInterval: TimeInterval = 250,
+        author: String = "",
         maximumItemCount: Int = 100,
         indentation: Indentation.Kind? = nil
     ) {
         self.targetPath = targetPath
-        self.ttlInterval = ttlInterval
+        self.author = author
         self.maximumItemCount = maximumItemCount
         self.indentation = indentation
     }

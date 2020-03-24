@@ -184,7 +184,73 @@ internal extension Node where Context: RSSItemContext {
             html.replaceSubrange(range, with: prefix + url.absoluteString + "\"")
         }
 
+        html.scan(using: [
+            Matcher(
+                identifiers: [.anyString("<h1")],
+                terminators: ["</h1>"],
+                allowMultipleMatches: false,
+                handler: { (heading, range) in
+                    html.removeSubrange(range)
+                }
+            )
+        ])
+
         return content(html)
+    }
+}
+
+internal extension Node where Context: AtomEntryContext {
+// TODO: make this
+//    static func id<T>(for item: Item<T>, site: T) -> Node {
+//        return .id(<#T##id: URLRepresentable##URLRepresentable#>)
+//    }
+
+    static func content<T>(for item: Item<T>, site: T) -> Node {
+        let baseURL = site.url
+        let prefixes = (href: "href=\"", src: "src=\"")
+
+        var html = item.body.html
+        var links = [(url: URL, range: ClosedRange<String.Index>, isHref: Bool)]()
+
+        html.scan(using: [
+            Matcher(
+                identifiers: [
+                    .anyString(prefixes.href),
+                    .anyString(prefixes.src)
+                ],
+                terminators: ["\""],
+                handler: { url, range in
+                    guard url.first == "/" else {
+                        return
+                    }
+
+                    let absoluteURL = baseURL.appendingPathComponent(String(url))
+                    let isHref = (html[range.lowerBound] == "h")
+                    links.append((absoluteURL, range, isHref))
+                }
+            )
+        ])
+
+        for (url, range, isHref) in links.reversed() {
+            let prefix = isHref ? prefixes.href : prefixes.src
+            html.replaceSubrange(range, with: prefix + url.absoluteString + "\"")
+        }
+
+        html.scan(using: [
+            Matcher(
+                identifiers: [.anyString("<h1")],
+                terminators: ["</h1>"],
+                allowMultipleMatches: false,
+                handler: { (heading, range) in
+                    html.removeSubrange(range)
+                }
+            )
+        ])
+
+        return content(
+            .type(.html),
+            .text(html)
+        )
     }
 }
 

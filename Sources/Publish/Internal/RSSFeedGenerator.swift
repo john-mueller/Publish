@@ -26,15 +26,16 @@ internal struct RSSFeedGenerator<Site: Website> {
 
         items.sort { $0.date > $1.date }
 
-        if let date = context.lastGenerationDate, let cache = oldCache {
-            if cache.config == config, cache.itemCount == items.count {
-                let newlyModifiedItem = items.first { $0.lastModified > date }
-
-                guard newlyModifiedItem != nil else {
-                    return try outputFile.write(cache.feed)
-                }
-            }
-        }
+        // TODO: reenable caching
+//        if let date = context.lastGenerationDate, let cache = oldCache {
+//            if cache.config == config, cache.itemCount == items.count {
+//                let newlyModifiedItem = items.first { $0.lastModified > date }
+//
+//                guard newlyModifiedItem != nil else {
+//                    return try outputFile.write(cache.feed)
+//                }
+//            }
+//        }
 
         let feed = makeFeed(containing: items).render(indentedBy: config.indentation)
 

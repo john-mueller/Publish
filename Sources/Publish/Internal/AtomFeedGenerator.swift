@@ -19,15 +19,16 @@ internal struct AtomFeedGenerator<Site: Website> {
 
         items.sort { $0.date > $1.date }
 
-        if let date = context.lastGenerationDate, let cache = oldCache {
-            if cache.config == config, cache.itemCount == items.count {
-                let newlyModifiedItem = items.first { $0.lastModified > date }
-
-                guard newlyModifiedItem != nil else {
-                    return try outputFile.write(cache.feed)
-                }
-            }
-        }
+        // TODO: reenable caching
+//        if let date = context.lastGenerationDate, let cache = oldCache {
+//            if cache.config == config, cache.itemCount == items.count {
+//                let newlyModifiedItem = items.first { $0.lastModified > date }
+//
+//                guard newlyModifiedItem != nil else {
+//                    return try outputFile.write(cache.feed)
+//                }
+//            }
+//        }
 
         let feed = makeFeed(containing: items).render(indentedBy: config.indentation)
 
@@ -46,24 +47,58 @@ private extension AtomFeedGenerator {
 
     func makeFeed(containing items: [Item<Site>]) -> Atom {
         Atom(
-//            .title(context.site.name),
-//            .description(context.site.description),
-//            .link(context.site.url),
-//            .language(context.site.language),
-//            .lastBuildDate(date, timeZone: context.dateFormatter.timeZone),
-//            .pubDate(date, timeZone: context.dateFormatter.timeZone),
-//            .ttl(Int(config.ttlInterval)),
-//            .atomLink(context.site.url(for: config.targetPath)),
-//            .forEach(items.prefix(config.maximumItemCount)) { item in
-//                .item(
-//                    .guid(for: item, site: context.site),
-//                    .title(item.rssTitle),
-//                    .description(item.description),
-//                    .link(context.site.url(for: item)),
-//                    .pubDate(item.date, timeZone: context.dateFormatter.timeZone),
-//                    .content(for: item, site: context.site)
-//                )
-//            }
+            .id(context.site.url.canonical),
+            .title(.text(context.site.name)),
+            .subtitle(.text(context.site.description)),
+            .author(
+                .name(config.author)
+            ),
+            .link(
+                .href(context.site.url.canonical),
+                .rel(.alternate)
+            ),
+            .link(
+                .href(
+                    context.site.url
+                        .appendingPathComponent(config.targetPath.string)
+                ),
+                .rel(.`self`)
+            ),
+            .updated(date),
+            .forEach(items.prefix(config.maximumItemCount)) { item in
+                .entry(
+                    .id(
+                        context.site.url(for: item).canonical
+                    ),
+                    .title(.text(item.title)),
+                    .summary(.text(item.description)),
+                    .link(
+                        .href(
+                            context.site.url
+                            .appendingPathComponent(item.path.string)
+                            .canonical
+                        ),
+                        .rel(.alternate)
+                    ),
+                    .content(for: item, site: context.site),
+                    .published(item.date),
+                    .updated(item.lastModified)
+                )
+            }
         )
+    }
+}
+
+private extension URLRepresentable {
+    var canonical: String {
+        if !description.hasSuffix("/") { return description + "/" }
+        return description
+    }
+}
+
+private extension Path {
+    var canonical: String {
+        if !description.hasSuffix("/") { return description + "/" }
+        return description
     }
 }

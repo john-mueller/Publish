@@ -16,6 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/johnsundell/ink.git", from: "0.2.0"),
+        // TODO: revert this to release version
 //        .package(url: "https://github.com/johnsundell/plot.git", from: "0.4.0"),
         .package(url: "https://github.com/john-mueller/plot.git", .branch("atom")),
         .package(url: "https://github.com/johnsundell/files.git", from: "4.0.0"),
