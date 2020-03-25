@@ -65,7 +65,7 @@ private extension RSSFeedGenerator {
             .forEach(items.prefix(config.maximumItemCount)) { item in
                 .item(
                     .guid(for: item, site: context.site),
-                    .title(item.rssTitle),
+                    .title(item.feedTitle),
                     .description(item.description),
                     .link(context.site.url(for: item)),
                     .pubDate(item.date, timeZone: context.dateFormatter.timeZone),

@@ -20,8 +20,8 @@ public protocol ContentProtocol {
     /// using raw HTML, Markdown, or by using a Plot `Node` hierarchy.
     var body: Content.Body { get set }
     /// The main publishing date of the location. Typically used to sort
-    /// lists of locations or when generating RSS feeds, and can also be
-    /// formatted and displayed to the user. When parsing a location from
+    /// lists of locations or when generating RSS or Atom feeds, and can also
+    /// be formatted and displayed to the user. When parsing a location from
     /// Markdown, this date can be defined using the `date` metadata key,
     /// and otherwise defaults to the last modification date of the file.
     var date: Date { get set }

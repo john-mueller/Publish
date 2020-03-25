@@ -21,7 +21,7 @@ public struct Item<Site: Website>: AnyItem, Hashable {
     public var tags: [Tag]
     public var path: Path { makeAbsolutePath() }
     public var content: Content
-    public var rssProperties: ItemRSSProperties
+    public var feedProperties: ItemFeedProperties
 
     internal let relativePath: Path
 
@@ -32,26 +32,26 @@ public struct Item<Site: Website>: AnyItem, Hashable {
     /// - parameter metadata: The item's site-specific metadata.
     /// - parameter tags: The item's tags.
     /// - parameter content: The main content of the item.
-    /// - parameter rssProperties: Properties customizing the item's RSS representation.
+    /// - parameter feedProperties: Properties customizing the item's RSS or Atom representation.
     public init(path: Path,
                 sectionID: Site.SectionID,
                 metadata: Site.ItemMetadata,
                 tags: [Tag] = [],
                 content: Content = Content(),
-                rssProperties: ItemRSSProperties = .init()) {
+                feedProperties: ItemFeedProperties = .init()) {
         self.relativePath = path
         self.sectionID = sectionID
         self.metadata = metadata
         self.tags = tags
         self.content = content
-        self.rssProperties = rssProperties
+        self.feedProperties = feedProperties
     }
 }
 
 internal extension Item {
-    var rssTitle: String {
-        let prefix = rssProperties.titlePrefix ?? ""
-        let suffix = rssProperties.titleSuffix ?? ""
+    var feedTitle: String {
+        let prefix = feedProperties.titlePrefix ?? ""
+        let suffix = feedProperties.titleSuffix ?? ""
         return prefix + title + suffix
     }
 }

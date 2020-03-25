@@ -15,6 +15,6 @@ public protocol AnyItem: Location {
     /// queried using either `Section` or `PublishingContext`.
     var tags: [Tag] { get }
     /// Properties that can be used to customize how an item is
-    /// presented within an RSS feed. See `ItemRSSProperties`.
-    var rssProperties: ItemRSSProperties { get }
+    /// presented within an RSS or Atom feed. See `ItemFeedProperties`.
+    var feedProperties: ItemFeedProperties { get }
 }

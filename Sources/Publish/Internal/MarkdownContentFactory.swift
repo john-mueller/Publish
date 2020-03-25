@@ -29,7 +29,8 @@ internal struct MarkdownContentFactory<Site: Website> {
         let path = try decoder.decodeIfPresent("path", as: Path.self) ?? path
         let tags = try decoder.decodeIfPresent("tags", as: [Tag].self)
         let content = try makeContent(fromMarkdown: markdown, file: file, decoder: decoder)
-        let rssProperties = try decoder.decodeIfPresent("rss", as: ItemRSSProperties.self)
+        let feedProperties = try decoder.decodeIfPresent("rss", as: ItemFeedProperties.self) ??
+            decoder.decodeIfPresent("atom", as: ItemFeedProperties.self)
 
         return Item(
             path: path,
@@ -37,7 +38,7 @@ internal struct MarkdownContentFactory<Site: Website> {
             metadata: metadata,
             tags: tags ?? [],
             content: content,
-            rssProperties: rssProperties ?? .init()
+            feedProperties: feedProperties ?? .init()
         )
     }
 

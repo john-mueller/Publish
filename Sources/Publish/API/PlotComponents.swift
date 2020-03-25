@@ -148,8 +148,8 @@ public extension Attribute where Context: HTMLSourceContext {
 internal extension Node where Context: RSSItemContext {
     static func guid<T>(for item: Item<T>, site: T) -> Node {
         return .guid(
-            .text(item.rssProperties.guid ?? site.url(for: item).absoluteString),
-            .isPermaLink(item.rssProperties.guid == nil)
+            .text(item.feedProperties.guid ?? site.url(for: item).absoluteString),
+            .isPermaLink(item.feedProperties.guid == nil)
         )
     }
 

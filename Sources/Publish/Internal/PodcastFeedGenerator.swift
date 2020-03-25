@@ -86,7 +86,7 @@ private extension PodcastFeedGenerator {
                     throw PodcastError(path: item.path, reason: .missingAudioSize)
                 }
 
-                let title = item.rssTitle
+                let title = item.feedTitle
                 let metadata = item.metadata.podcast
 
                 return .item(

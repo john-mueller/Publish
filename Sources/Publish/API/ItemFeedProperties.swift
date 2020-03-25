@@ -7,14 +7,14 @@
 import Foundation
 
 /// Properties that can be used to customize an item's RSS representation.
-public struct ItemRSSProperties: Codable, Hashable {
+public struct ItemFeedProperties: Codable, Hashable {
     /// Any specific GUID that should be added for the item. When `nil`,
-    /// the item's URL will be used and the `isPermaLink` attribute will
+    /// the item's URL will be used and the RSS `isPermaLink` attribute will
     /// be set to `true`. If not `nil`, a non-permalink will be assumed.
     public var guid: String?
-    /// Any prefix that should be added to the item's title within an RSS feed.
+    /// Any prefix that should be added to the item's title within an RSS or Atom feed.
     public var titlePrefix: String?
-    /// Any suffix that should be added to the item's title within an RSS feed.
+    /// Any suffix that should be added to the item's title within an RSS or Atom feed.
     public var titleSuffix: String?
 
     /// Initialize an instance of this type
@@ -26,5 +26,6 @@ public struct ItemRSSProperties: Codable, Hashable {
                 titleSuffix: String? = nil) {
         self.guid = guid
         self.titlePrefix = titlePrefix
+        self.titleSuffix = titleSuffix
     }
 }
