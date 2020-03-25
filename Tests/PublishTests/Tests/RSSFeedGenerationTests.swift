@@ -59,6 +59,7 @@ final class RSSFeedGenerationTests: PublishTestCase {
         XCTAssertTrue(feed.contains("<title>PrefixTitleSuffix</title>"))
     }
 
+    // TODO: reenable caching
     func testReusingPreviousFeedIfNoItemsWereModified() throws {
         let folder = try Folder.createTemporary()
         let contentFile = try folder.createFile(at: "Content/one/item.md")

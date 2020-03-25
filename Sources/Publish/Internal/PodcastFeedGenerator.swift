@@ -69,9 +69,7 @@ private extension PodcastFeedGenerator {
             ),
             .category(
                 config.category,
-                config.subcategory.map { .category($0) } ?? .empty
-                // TODO: troubleshoot this
-//                .unwrap(config.subcategory) { .category($0) }
+                .unwrap(config.subcategory) { .category($0) }
             ),
             .type(config.type),
             .image(config.imageURL),
