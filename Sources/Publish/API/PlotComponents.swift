@@ -9,6 +9,7 @@ import Plot
 import Ink
 import Sweep
 
+// TODO: Add Atom parameters here? Also, rssFeedLink needs atomFeedLink equivalent?
 public extension Node where Context == HTML.DocumentContext {
     /// Add an HTML `<head>` tag within the current context, based
     /// on inferred information from the current location and `Website`
@@ -184,7 +185,6 @@ internal extension Node where Context: RSSItemContext {
             html.replaceSubrange(range, with: prefix + url.absoluteString + "\"")
         }
 
-        // TODO: enable this and fix test
         html.scan(using: [
             Matcher(
                 identifiers: [.anyString("<h1")],
@@ -201,10 +201,11 @@ internal extension Node where Context: RSSItemContext {
 }
 
 internal extension Node where Context: AtomEntryContext {
-// TODO: make this
-//    static func id<T>(for item: Item<T>, site: T) -> Node {
-//        return .id(<#T##id: URLRepresentable##URLRepresentable#>)
-//    }
+    static func id<T>(for item: Item<T>, site: T) -> Node {
+        return .id(
+            String(item.feedProperties.guid ?? site.url(for: item).absoluteString)
+        )
+    }
 
     static func content<T>(for item: Item<T>, site: T) -> Node {
         let baseURL = site.url

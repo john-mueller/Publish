@@ -67,9 +67,7 @@ private extension AtomFeedGenerator {
             .updated(date),
             .forEach(items.prefix(config.maximumItemCount)) { item in
                 .entry(
-                    .id(
-                        context.site.url(for: item).canonical
-                    ),
+                    .id(for: item, site: context.site),
                     .title(.text(item.title)),
                     .summary(.text(item.description)),
                     .link(

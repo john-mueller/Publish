@@ -51,6 +51,7 @@ public extension Website {
 
 // MARK: - Publishing
 
+// TODO: Add Atom parameters here? Also, rssFeedLink needs atomFeedLink equivalent?
 public extension Website {
     /// Publish this website using a default pipeline. To build a completely
     /// custom pipeline, use the `publish(using:)` method.
